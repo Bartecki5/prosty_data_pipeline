@@ -1,0 +1,22 @@
+#Wyobraź sobie plik .yml jako przepis kulinarny albo instrukcję obsługi dla Dockera.
+
+version: '3.8'
+
+services:
+  moja_baza_danych:
+    #sciagnij z internetu gotowe pudełko z baza psotgresql w werscji 15
+    image: postgres:15
+    #zmienne środowiskowe- tworzymy uzytkownika
+    environment:
+      - POSTGRES_USER=bartek
+      - POSTGRES_PASSWORD=haslo
+      - POSTGRES_DB=pogoda_db
+    ports:
+      - "5433:5432"
+  
+  #nasz drugi pokoj/serwis
+  moj_skrypt_python:
+    build: . #nie pobieramy gotowego obrazu jak wczesniej, ale budujemy go sami na podstawie przepisu Dockerfile (ten sam folder ".")
+    #nie uruchamiaj bazy dopóki moja_baza_danych nie będzie gotowa
+    depends_on:
+      - moja_baza_danych
