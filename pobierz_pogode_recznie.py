@@ -1,18 +1,16 @@
 import requests
-import psycopg2 #tlumacz python - bazy danych
+import psycopg2 
 import time
 
-#adres api dla pzn
+
 url = "https://api.open-meteo.com/v1/forecast?latitude=52.4069&longitude=16.9299&current_weather=true"
 
-#wysylamy zapytanie
 odpowiedz = requests.get(url)
 
-#zmieniamy surową odp w czytelny slownik pythona 
+
 dane = odpowiedz.json()
 
-#print("Dane z api: ")
-#print(dane)
+
 aktualna_pogoda = dane['current_weather']
 temperatura = aktualna_pogoda['temperature']
 wiatr = aktualna_pogoda['windspeed']
@@ -25,14 +23,14 @@ czas = aktualna_pogoda['time']
 #łączenie z bazą danych dockera
 
 polaczenie = psycopg2.connect(
-    host="localhost",   #baza jest na naszym kompie
-    port="5433",        #nasz port
-    database="pogoda_db", #nazwa bazy z pliku .yml
-    user="bartek",  #uzytkownik 
-    password="haslo"    #haslo
+    host="localhost",   
+    port="5433",        
+    database="pogoda_db", 
+    user="bartek",   
+    password="haslo"   
 )
 
-# kursor to ramie robota, które wykonuje nasze polecenia wew bazy
+
 kursor = polaczenie.cursor()
 
 tworzenie_tabeli_sql="""
@@ -52,10 +50,9 @@ VALUES (%s, %s , %s);
 """
 kursor.execute(wstawianie_danych_sql,(czas,temperatura,wiatr))
 
-#zatwierdzenie zmian
+
 polaczenie.commit()
 
-#sprzatanie
 kursor.close()
 polaczenie.close()
 
