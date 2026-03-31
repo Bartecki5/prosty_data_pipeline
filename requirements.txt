@@ -1,5 +1,3 @@
 requests
 psycopg2-binary
 
-#Krok 1: Tworzymy listę zakupów (requirements.txt)
-#Kiedy Docker będzie budował "pudełko" dla Twojego Pythona, pobierze z internetu czystego, gołego Pythona. Pamiętasz, jak na początku ręcznie wpisywałeś pip install requests i pip install psycopg2-binary? Docker też musi to zrobić. Musimy dać mu kartkę z listą zakupów.
